@@ -2738,7 +2738,7 @@ export default function ChatWorkspace({
                 // conversations already bound (e.g. via a course deep link).
                 workspaces={workspaces}
                 workspaceId={state.workspaceId || ""}
-                workspaceError={workspaceError || workspaceListError}
+                workspaceError={workspaceError}
                 workspacePending={workspacePending}
                 // Immersive modes own their own material; a workspace binding
                 // there would compete with it, so they get no pill.

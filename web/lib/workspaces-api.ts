@@ -47,8 +47,27 @@ const endpoint = '/api/settings/workspace/registrations'
 
 async function request<T>(url: string, init?: RequestInit): Promise<T> {
   const response = await apiFetch(apiUrl(url), init)
-  const payload = await response.json()
-  if (!response.ok) throw new Error(payload.detail || `Request failed (${response.status})`)
+  if (!response.ok) {
+    let detail = `Request failed (${response.status})`
+    try {
+      const contentType = response.headers.get('content-type') || ''
+      if (contentType.includes('application/json')) {
+        const payload = await response.json()
+        if (payload?.detail) detail = String(payload.detail)
+      }
+    } catch {
+      // Response body was not JSON
+    }
+    throw new Error(detail)
+  }
+  const contentType = response.headers.get('content-type') || ''
+  if (!contentType.includes('application/json')) {
+    throw new Error(`Unexpected server response (${response.status})`)
+  }
+  const payload = await response.json().catch(() => null)
+  if (payload === null) {
+    throw new Error(`Invalid JSON response from server (${response.status})`)
+  }
   return payload as T
 }
 
@@ -56,8 +75,13 @@ export function listWorkspaces(force = false): Promise<ChatWorkspaceRegistration
   return withClientCache(
     'workspaces:list',
     async () => {
-      const result = await request<{ workspaces: ChatWorkspaceRegistration[] }>(endpoint)
-      return result.workspaces
+      try {
+        const result = await request<{ workspaces: ChatWorkspaceRegistration[] }>(endpoint)
+        return Array.isArray(result?.workspaces) ? result.workspaces : []
+      } catch (err) {
+        console.warn('Could not fetch workspaces:', err)
+        return []
+      }
     },
     { force, ttlMs: 15_000 }
   )
