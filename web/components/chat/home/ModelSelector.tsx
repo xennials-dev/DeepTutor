@@ -183,7 +183,12 @@ export default function ModelSelector({
   return (
     <div ref={rootRef} className="relative">
       {/* The model name shares the composer selectors' spring and hover delay. */}
-      <Tooltip label={canRefresh ? t("Refresh models") : label} suppressed={open} side="top">
+      <Tooltip
+        label={canRefresh ? t("Refresh models") : label}
+        description={t("Switch between configured LLM providers and models.")}
+        suppressed={open}
+        side="top"
+      >
         <button
           type="button"
           disabled={disabled}

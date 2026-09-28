@@ -1094,7 +1094,15 @@ export default memo(function ChatComposer({
               <div className={styles.context}>
                 {showCapabilityChip && (
                   <div className="relative min-w-0 max-w-full">
-                    <Tooltip label={t(activeCap.label)} suppressed={capMenuOpen} side="top">
+                    <Tooltip
+                      label={t(activeCap.label)}
+                      description={t(
+                        activeCap.description ||
+                          "Select learning mode: Chat, Solve, Quiz, Research, or Visualize.",
+                      )}
+                      suppressed={capMenuOpen}
+                      side="top"
+                    >
                       <button
                         ref={capBtnRef}
                         aria-haspopup="menu"
@@ -1307,7 +1315,12 @@ export default memo(function ChatComposer({
 
                 <Tooltip
                   label={recorder.state === "recording" ? t("Stop recording") : t("Record voice")}
-                  description={recorder.error || undefined}
+                  description={
+                    recorder.error ||
+                    (recorder.state === "recording"
+                      ? t("Listening... Click to finish speaking and transcribe voice to text.")
+                      : t("Click to dictate your prompt via voice speech-to-text."))
+                  }
                   side="top"
                 >
                   <button
@@ -1343,7 +1356,17 @@ export default memo(function ChatComposer({
                     place (both stacked in the same grid cell) and the progress
                     ring moves to the perimeter, where it can spin without
                     fighting the square for the same space. */}
-                <Tooltip label={sendTitle} side="top">
+                <Tooltip
+                  label={sendTitle}
+                  description={
+                    sendState === "streaming"
+                      ? t("Click to interrupt and stop the ongoing response.")
+                      : sendState === "ready"
+                        ? t("Submit prompt to tutor (Enter to send, Shift+Enter for new line).")
+                        : t("Type a prompt or upload materials to start a turn.")
+                  }
+                  side="top"
+                >
                   <button
                     type="button"
                     onClick={handleSendButtonClick}

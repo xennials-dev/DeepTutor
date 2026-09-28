@@ -318,6 +318,13 @@ export function SidebarNav({
     const Icon = entry.icon;
     const { style, ...handlers } = drag.getItemProps(href);
     const label = t(entry.label);
+    const description = locked
+      ? lockedTooltip
+      : entry.instruction
+        ? t(entry.instruction)
+        : entry.tooltipKey
+          ? t(entry.tooltipKey)
+          : undefined;
     const body = (
       <Fragment key={`${href}-content`}>
         <Icon size={15} strokeWidth={active ? 1.9 : 1.6} className="shrink-0" />
@@ -357,20 +364,26 @@ export function SidebarNav({
             </div>
           </Tooltip>
         ) : (
-          <Link
+          <Tooltip
             key={`${href}-destination`}
-            href={href}
-            prefetch={false}
-            draggable={false}
-            onClick={href === "/chat" ? onHomeClick : onNavigate}
-            className={`${rowClass} ${
-              active
-                ? "bg-[var(--accent)] font-medium text-[var(--foreground)]"
-                : "text-foreground/85 hover:bg-background/60 hover:text-[var(--foreground)]"
-            }`}
+            label={label}
+            description={description}
+            side="right"
           >
-            {body}
-          </Link>
+            <Link
+              href={href}
+              prefetch={false}
+              draggable={false}
+              onClick={href === "/chat" ? onHomeClick : onNavigate}
+              className={`${rowClass} ${
+                active
+                  ? "bg-[var(--accent)] font-medium text-[var(--foreground)]"
+                  : "text-foreground/85 hover:bg-background/60 hover:text-[var(--foreground)]"
+              }`}
+            >
+              {body}
+            </Link>
+          </Tooltip>
         )}
         <button
           key={`${href}-arrange`}
@@ -571,18 +584,30 @@ export function SidebarHome({
           </div>
         </Tooltip>
       ) : (
-        <Link
-          href="/chat"
-          prefetch={false}
-          onClick={onHomeClick}
-          className={`${className} ${
-            active
-              ? "bg-[var(--accent)] font-medium text-[var(--foreground)]"
-              : "text-foreground/85 hover:bg-background/60 hover:text-[var(--foreground)]"
-          }`}
+        <Tooltip
+          label={t(entry.label)}
+          description={
+            entry.instruction
+              ? t(entry.instruction)
+              : entry.tooltipKey
+                ? t(entry.tooltipKey)
+                : undefined
+          }
+          side="right"
         >
-          {content}
-        </Link>
+          <Link
+            href="/chat"
+            prefetch={false}
+            onClick={onHomeClick}
+            className={`${className} ${
+              active
+                ? "bg-[var(--accent)] font-medium text-[var(--foreground)]"
+                : "text-foreground/85 hover:bg-background/60 hover:text-[var(--foreground)]"
+            }`}
+          >
+            {content}
+          </Link>
+        </Tooltip>
       )}
     </div>
   );
@@ -608,9 +633,11 @@ function RailRow({
   const label = t(entry.label);
   const description = locked
     ? lockedTooltip
-    : entry.tooltipKey
-      ? t(entry.tooltipKey)
-      : undefined;
+    : entry.instruction
+      ? t(entry.instruction)
+      : entry.tooltipKey
+        ? t(entry.tooltipKey)
+        : undefined;
 
   if (locked) {
     return (

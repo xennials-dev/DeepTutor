@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { Check, ChevronDown, School } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import Tooltip from "@/shared/ui/Tooltip";
 
 import type { StudyCourse } from "@/lib/courses-api";
 
@@ -86,36 +87,42 @@ export function CoursePill({
 
   return (
     <div className="relative">
-      <button
-        ref={buttonRef}
-        type="button"
-        onClick={() => setOpen((value) => !value)}
-        aria-haspopup="menu"
-        aria-expanded={open}
-        className={`inline-flex h-8 shrink-0 items-center gap-1.5 rounded-lg px-2 text-[13px] font-medium transition-[background-color,color,transform] duration-150 active:scale-[0.97] ${
-          unbound
-            ? "text-[var(--primary)] hover:bg-[var(--primary)]/10"
-            : "text-[var(--muted-foreground)] hover:bg-[var(--muted)]/55 hover:text-[var(--foreground)]"
-        }`}
+      <Tooltip
+        label={active?.name || t("Course Study")}
+        description={t("Bind conversation to a study course syllabus to track progress")}
+        side="top"
       >
-        {active?.color ? (
-          <span
-            aria-hidden
-            className="h-2 w-2 shrink-0 rounded-full"
-            style={{ backgroundColor: active.color }}
+        <button
+          ref={buttonRef}
+          type="button"
+          onClick={() => setOpen((value) => !value)}
+          aria-haspopup="menu"
+          aria-expanded={open}
+          className={`inline-flex h-8 shrink-0 items-center gap-1.5 rounded-lg px-2 text-[13px] font-medium transition-[background-color,color,transform] duration-150 active:scale-[0.97] ${
+            unbound
+              ? "text-[var(--primary)] hover:bg-[var(--primary)]/10"
+              : "text-[var(--muted-foreground)] hover:bg-[var(--muted)]/55 hover:text-[var(--foreground)]"
+          }`}
+        >
+          {active?.color ? (
+            <span
+              aria-hidden
+              className="h-2 w-2 shrink-0 rounded-full"
+              style={{ backgroundColor: active.color }}
+            />
+          ) : (
+            <School size={15} strokeWidth={1.7} className="shrink-0" />
+          )}
+          <span className="max-w-[150px] truncate">
+            {active?.name ?? t("Pick a course")}
+          </span>
+          <ChevronDown
+            size={12}
+            strokeWidth={2}
+            className={`-mr-0.5 shrink-0 transition-transform duration-200 ${open ? "rotate-180" : ""}`}
           />
-        ) : (
-          <School size={15} strokeWidth={1.7} className="shrink-0" />
-        )}
-        <span className="max-w-[150px] truncate">
-          {active?.name ?? t("Pick a course")}
-        </span>
-        <ChevronDown
-          size={12}
-          strokeWidth={2}
-          className={`-mr-0.5 shrink-0 transition-transform duration-200 ${open ? "rotate-180" : ""}`}
-        />
-      </button>
+        </button>
+      </Tooltip>
 
       {open && (
         <div

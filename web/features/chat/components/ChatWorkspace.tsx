@@ -2516,6 +2516,7 @@ export default function ChatWorkspace({
                   disabled={!chatSavePayload}
                   icon={BookmarkPlus}
                   label={t("Save to Notebook")}
+                  description={t("Export key takeaways from this session into your study notebook.")}
                 />
                 <HeaderActionButton
                   onClick={handleDownloadMarkdown}
@@ -2523,12 +2524,14 @@ export default function ChatWorkspace({
                   icon={Download}
                   label={t("Download Markdown")}
                   title={t("Download chat history as Markdown")}
+                  description={t("Export the full session history and code blocks as a Markdown file.")}
                 />
                 <HeaderActionButton
                   onClick={() => viewerPanelRef.current?.openMarkdownNoteTab()}
                   icon={NotebookPen}
                   label={t("Markdown note")}
                   title={t("Write Markdown in chat")}
+                  description={t("Open the scratchpad note editor to jot thoughts alongside the chat.")}
                 />
                 <HeaderActionButton
                   onClick={toggleViewerPanel}
@@ -2536,6 +2539,7 @@ export default function ChatWorkspace({
                   icon={PanelRight}
                   label={t("Activity")}
                   title={t("Session activity, attachments & previews")}
+                  description={t("Inspect subagent traces, generated charts, and document previews.")}
                 />
               </div>
             </div>
@@ -3030,6 +3034,7 @@ function HeaderActionButton({
   icon: Icon,
   label,
   title,
+  description,
 }: {
   onClick: () => void;
   disabled?: boolean;
@@ -3037,9 +3042,10 @@ function HeaderActionButton({
   icon: LucideIcon;
   label: string;
   title?: string;
+  description?: string;
 }) {
   return (
-    <Tooltip label={title ?? label} side="bottom">
+    <Tooltip label={title ?? label} description={description} side="bottom">
       <button
         onClick={onClick}
         disabled={disabled}

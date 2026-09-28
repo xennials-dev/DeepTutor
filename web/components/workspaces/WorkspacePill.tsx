@@ -120,7 +120,11 @@ export function WorkspacePill({
 
   return (
     <div className="relative flex min-w-0 items-center gap-1.5">
-      <Tooltip label={label} side="top">
+      <Tooltip
+        label={label}
+        description={t("Switch or manage project content workspaces to isolate chats, files, and outputs.")}
+        side="top"
+      >
         <button
           ref={buttonRef}
           {...triggerProps}

@@ -187,27 +187,31 @@ export function SidebarShell({
       <aside className="group/sb relative flex h-dvh w-[60px] shrink-0 flex-col items-center bg-[var(--secondary)] py-3 transition-all duration-200">
         {/* Header: logo + collapse toggle (toggle replaces logo on hover) */}
         <div className="relative mb-2 flex h-9 w-9 items-center justify-center">
-          <Link
-            href="/"
-            prefetch={false}
-            aria-label="DeepTutor"
-            className="flex items-center justify-center transition-opacity duration-150 group-hover/sb:opacity-0"
-          >
-            <Image
-              src="/logo.png"
-              alt="DeepTutor"
-              width={22}
-              height={22}
-              className="h-[22px] w-[22px] rounded-md"
-            />
-          </Link>
-          <button
-            onClick={() => setCollapsed(false)}
-            className="absolute inset-0 flex items-center justify-center rounded-lg text-[var(--muted-foreground)] opacity-0 transition-all duration-150 hover:bg-background/60 hover:text-[var(--foreground)] group-hover/sb:opacity-100"
-            aria-label={t("Expand sidebar")}
-          >
-            <PanelLeftOpen size={16} />
-          </button>
+          <Tooltip label="DeepTutor" description={t("Return to Home tutoring dashboard")} side="right">
+            <Link
+              href="/"
+              prefetch={false}
+              aria-label="DeepTutor"
+              className="flex items-center justify-center transition-opacity duration-150 group-hover/sb:opacity-0"
+            >
+              <Image
+                src="/logo.png"
+                alt="DeepTutor"
+                width={22}
+                height={22}
+                className="h-[22px] w-[22px] rounded-md"
+              />
+            </Link>
+          </Tooltip>
+          <Tooltip label={t("Expand sidebar")} description={t("Show full navigation menu and labels")} side="right">
+            <button
+              onClick={() => setCollapsed(false)}
+              className="absolute inset-0 flex items-center justify-center rounded-lg text-[var(--muted-foreground)] opacity-0 transition-all duration-150 hover:bg-background/60 hover:text-[var(--foreground)] group-hover/sb:opacity-100"
+              aria-label={t("Expand sidebar")}
+            >
+              <PanelLeftOpen size={16} />
+            </button>
+          </Tooltip>
         </div>
 
         <SidebarHome collapsed onHomeClick={handleHomeClick} />
@@ -225,7 +229,12 @@ export function SidebarShell({
           {SECONDARY_NAV.map((item) => {
             const active = isNavActive(pathname, item.href);
             return (
-              <Tooltip key={item.href} label={t(item.label) as string} side="right">
+              <Tooltip
+                key={item.href}
+                label={t(item.label) as string}
+                description={item.instruction ? (t(item.instruction) as string) : undefined}
+                side="right"
+              >
                 <Link
                   href={item.href}
                   prefetch={false}
@@ -256,32 +265,36 @@ export function SidebarShell({
     >
       {/* Header: logo + collapse toggle */}
       <div className="flex h-[52px] shrink-0 items-center justify-between px-4">
-        <Link href="/" prefetch={false} className="group flex items-center gap-1.5">
-          <Image
-            src="/logo.png"
-            alt="DeepTutor"
-            width={22}
-            height={22}
-            className="h-[22px] w-[22px] transition-transform duration-200 group-hover:scale-105"
-          />
-          <Image
-            src="/banner.png"
-            alt="DeepTutor"
-            width={897}
-            height={236}
-            priority
-            className="h-[22px] w-auto transition-transform duration-200 group-hover:scale-105"
-          />
-        </Link>
+        <Tooltip label="DeepTutor" description={t("Return to Home tutoring dashboard")} side="bottom">
+          <Link href="/" prefetch={false} className="group flex items-center gap-1.5">
+            <Image
+              src="/logo.png"
+              alt="DeepTutor"
+              width={22}
+              height={22}
+              className="h-[22px] w-[22px] transition-transform duration-200 group-hover:scale-105"
+            />
+            <Image
+              src="/banner.png"
+              alt="DeepTutor"
+              width={897}
+              height={236}
+              priority
+              className="h-[22px] w-auto transition-transform duration-200 group-hover:scale-105"
+            />
+          </Link>
+        </Tooltip>
         {/* The rail is a desktop affordance; in the drawer the scrim and the
             top-bar toggle already own "make this go away". */}
-        <button
-          onClick={() => setCollapsed(true)}
-          className="rounded-md p-1 text-[var(--muted-foreground)] transition-colors hover:text-[var(--foreground)] max-md:hidden"
-          aria-label={t("Collapse sidebar")}
-        >
-          <PanelLeftClose size={15} />
-        </button>
+        <Tooltip label={t("Collapse sidebar")} description={t("Collapse to compact icon rail")} side="bottom">
+          <button
+            onClick={() => setCollapsed(true)}
+            className="rounded-md p-1 text-[var(--muted-foreground)] transition-colors hover:text-[var(--foreground)] max-md:hidden"
+            aria-label={t("Collapse sidebar")}
+          >
+            <PanelLeftClose size={15} />
+          </button>
+        </Tooltip>
       </div>
 
       <SidebarHome onHomeClick={handleHomeClick} />
@@ -365,20 +378,26 @@ export function SidebarShell({
           {SECONDARY_NAV.map((item) => {
             const active = isNavActive(pathname, item.href);
             return (
-              <Link
+              <Tooltip
                 key={item.href}
-                href={item.href}
-                prefetch={false}
-                onClick={closeDrawerOnNav}
-                className={`flex min-h-8 min-w-0 flex-1 items-center gap-2 rounded-md px-2.5 py-1.5 text-[13px] transition-colors ${
-                  active
-                    ? "bg-[var(--accent)] font-medium text-[var(--foreground)]"
-                    : "text-foreground/85 hover:bg-background/60 hover:text-[var(--foreground)]"
-                }`}
+                label={t(item.label) as string}
+                description={item.instruction ? (t(item.instruction) as string) : undefined}
+                side="top"
               >
-                <item.icon size={15} strokeWidth={active ? 1.9 : 1.6} />
-                <span>{t(item.label)}</span>
-              </Link>
+                <Link
+                  href={item.href}
+                  prefetch={false}
+                  onClick={closeDrawerOnNav}
+                  className={`flex min-h-8 min-w-0 flex-1 items-center gap-2 rounded-md px-2.5 py-1.5 text-[13px] transition-colors ${
+                    active
+                      ? "bg-[var(--accent)] font-medium text-[var(--foreground)]"
+                      : "text-foreground/85 hover:bg-background/60 hover:text-[var(--foreground)]"
+                  }`}
+                >
+                  <item.icon size={15} strokeWidth={active ? 1.9 : 1.6} />
+                  <span>{t(item.label)}</span>
+                </Link>
+              </Tooltip>
             );
           })}
           <VersionBadge onNavigate={closeDrawerOnNav} />

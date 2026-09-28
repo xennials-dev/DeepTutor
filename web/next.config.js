@@ -113,7 +113,7 @@ const nextConfig = {
 
   // Standalone output: self-contained server.js + minimal node_modules
   // This eliminates the need to copy the full node_modules into Docker production images
-  output: "standalone",
+  output: process.env.VERCEL === "1" ? undefined : "standalone",
 
   // Keep the standalone bundle rooted at this frontend directory. Without an
   // explicit root, Next.js can mirror the absolute checkout path inside

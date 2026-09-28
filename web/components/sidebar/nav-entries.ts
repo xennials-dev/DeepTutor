@@ -18,6 +18,7 @@ export interface NavEntry {
   label: string
   icon: LucideIcon
   tooltipKey?: string
+  instruction?: string
   defaultCollapsed?: boolean
   /** Model capability this feature needs; locked when the user lacks it. */
   requires?: Capability
@@ -33,12 +34,20 @@ export interface NavEntry {
  * the neighbour it follows below rather than at the bottom of their list.
  */
 export const PRIMARY_NAV: NavEntry[] = [
-  { href: '/chat', label: 'Home', icon: House, tooltipKey: 'Home tooltip', requires: 'llm' },
+  {
+    href: '/chat',
+    label: 'Home',
+    icon: House,
+    tooltipKey: 'Home tooltip',
+    instruction: 'Multi-tool AI chat: ask questions, solve problems, generate quizzes, and research topics.',
+    requires: 'llm',
+  },
   {
     href: '/partners',
     label: 'Partners',
     icon: HeartHandshake,
     tooltipKey: 'Partners tooltip',
+    instruction: 'Chat with dedicated AI personas and IM-connected companions (Discord, Slack, WeChat).',
     requires: 'llm',
   },
   {
@@ -46,14 +55,28 @@ export const PRIMARY_NAV: NavEntry[] = [
     label: 'Personalized Learning',
     icon: GraduationCap,
     tooltipKey: 'One tutor, your own way to learn.',
+    instruction: 'Mastery Paths, interactive Living Books, and immersive reading & video learning.',
   },
-  { href: '/space', label: 'Learning Space', icon: LayoutGrid, tooltipKey: 'Space tooltip' },
-  { href: '/kanban', label: 'Task Board', icon: ListTodo, tooltipKey: 'kanban.intro' },
+  {
+    href: '/space',
+    label: 'Learning Space',
+    icon: LayoutGrid,
+    tooltipKey: 'Space tooltip',
+    instruction: 'Manage your personal knowledge bases, question banks, study notebooks, and memory.',
+  },
+  {
+    href: '/kanban',
+    label: 'Task Board',
+    icon: ListTodo,
+    tooltipKey: 'kanban.intro',
+    instruction: 'Track study tasks in To do, In progress, and Done with drag-and-drop Kanban cards.',
+  },
   {
     href: '/co-writer',
     label: 'Co-Writer',
     icon: PenLine,
     tooltipKey: 'Co-Writer tooltip',
+    instruction: 'Collaborative AI document editor: draft essays, notes, and research alongside the AI.',
     requires: 'llm',
     defaultCollapsed: true,
   },
@@ -62,11 +85,19 @@ export const PRIMARY_NAV: NavEntry[] = [
     label: 'My Agents',
     icon: Bot,
     tooltipKey: 'Agents tooltip',
+    instruction: 'Connect local or external AI coding agents (Claude Code, Codex, Grok, Kimi, Hermes).',
     defaultCollapsed: true,
   },
 ]
 
-export const SECONDARY_NAV: NavEntry[] = [{ href: '/settings', label: 'Settings', icon: Settings }]
+export const SECONDARY_NAV: NavEntry[] = [
+  {
+    href: '/settings',
+    label: 'Settings',
+    icon: Settings,
+    instruction: 'Configure AI providers, API keys, model parameters, themes, and workspace settings.',
+  },
+]
 
 export const DEFAULT_COLLAPSED_NAV = PRIMARY_NAV.filter(entry => entry.defaultCollapsed).map(
   entry => entry.href

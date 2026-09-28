@@ -30,6 +30,7 @@ import {
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useOutsideClick } from "@/hooks/use-outside-click";
+import Tooltip from "@/shared/ui/Tooltip";
 
 export interface ComposerResourceItem {
   key: string;
@@ -236,34 +237,43 @@ export default function ComposerResources({
   };
   return (
     <div ref={rootRef} className="relative shrink-0">
-      <button
-        ref={triggerRef}
-        {...triggerProps}
-        aria-label={t("Resources")}
-        type="button"
-        aria-haspopup="dialog"
-        aria-expanded={open}
-        aria-controls={id}
-        onClick={() => (open ? close() : onOpenChange(true))}
-        className={`inline-flex h-8 items-center rounded-lg px-2 text-[14px] font-medium transition-colors hover:bg-[var(--muted)] ${configured ? "text-[var(--primary)]" : "text-[var(--muted-foreground)]"}`}
+      <Tooltip
+        label={t("Resources")}
+        description={t(
+          "Attach knowledge bases, notebooks, books, question bank items, chat history, or custom personas.",
+        )}
+        suppressed={open}
+        side="top"
       >
-        <span className="relative shrink-0">
-          <Layers size={16} strokeWidth={1.7} />
-          {configured && (
-            <span
-              className="absolute -right-1 -top-0.5 h-1.5 w-1.5 rounded-full bg-[var(--primary)]"
-              aria-label={t("Configured")}
+        <button
+          ref={triggerRef}
+          {...triggerProps}
+          aria-label={t("Resources")}
+          type="button"
+          aria-haspopup="dialog"
+          aria-expanded={open}
+          aria-controls={id}
+          onClick={() => (open ? close() : onOpenChange(true))}
+          className={`inline-flex h-8 items-center rounded-lg px-2 text-[14px] font-medium transition-colors hover:bg-[var(--muted)] ${configured ? "text-[var(--primary)]" : "text-[var(--muted-foreground)]"}`}
+        >
+          <span className="relative shrink-0">
+            <Layers size={16} strokeWidth={1.7} />
+            {configured && (
+              <span
+                className="absolute -right-1 -top-0.5 h-1.5 w-1.5 rounded-full bg-[var(--primary)]"
+                aria-label={t("Configured")}
+              />
+            )}
+          </span>
+          <ToolbarLabel expanded={expanded}>
+            <span>{t("Resources")}</span>
+            <ChevronRight
+              size={13}
+              className={`shrink-0 transition-transform duration-200 ${open ? "rotate-90" : ""}`}
             />
-          )}
-        </span>
-        <ToolbarLabel expanded={expanded}>
-          <span>{t("Resources")}</span>
-          <ChevronRight
-            size={13}
-            className={`shrink-0 transition-transform duration-200 ${open ? "rotate-90" : ""}`}
-          />
-        </ToolbarLabel>
-      </button>
+          </ToolbarLabel>
+        </button>
+      </Tooltip>
       <AnimatePresence>
         {open && (
           <motion.div
